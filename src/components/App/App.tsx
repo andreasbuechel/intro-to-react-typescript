@@ -1,18 +1,28 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import Banner from "../Banner";
-import AnimalCard from "../AnimalCard";
-import { fetchAnimals } from "../../utils/mock-api";
+import {fetchAnimals} from "../../utils/mock-api";
 import "./App.css";
-import { AnimalData } from "../../utils/types";
+import {AnimalData} from "../../utils/types";
+import AnimalCard from "../AnimalCard";
 
 
 const App = () => {
+  const [animals, setAnimals] = useState([] as AnimalData []);
+
+  useEffect(() => {
+    fetchAnimals()
+      .then(animals => {
+        setAnimals(animals);
+        console.log(animals);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div className="App">
-      <Banner />
+      <Banner/>
       <div className="animalWrapper">
-        <AnimalCard />
+        {animals.map(animal => <AnimalCard data={animal} key={animal.id}/>)}
       </div>
     </div>
   );
